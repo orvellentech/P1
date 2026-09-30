@@ -1,0 +1,200 @@
+/* ============================================================
+   Design tokens — one palette per era.
+   ============================================================ */
+:root {
+  /* Theater / film */
+  --theater-black: #070504;
+  --theater-wall: #120b08;
+  --gold: #c9a45c;
+  --gold-bright: #f1d392;
+  --warm-light: #ffcf8a;
+  --film-white: #e9e7e2;
+  --film-black: #0d0d0d;
+
+  /* Antique */
+  --parchment: #ead7a8;
+  --parchment-deep: #d9bf86;
+  --parchment-edge: #b58f4f;
+  --ink-sepia: #3a2714;
+  --ink-faded: #6e5332;
+  --seal-red: #8e1b1b;
+
+  /* Modern */
+  --paper-white: #f7f6f2;
+  --ink: #111111;
+  --ink-muted: #6a6a66;
+  --hairline: rgba(17, 17, 17, 0.14);
+
+  /* 2060 */
+  --future-bg: #05060f;
+  --future-ink: #eef0ff;
+  --future-muted: #9aa0c3;
+  --future-violet: #8b6cff;
+  --future-cyan: #3fd8f2;
+  --future-coral: #ff6b8e;
+  --future-amber: #ffc86b;
+
+  --ease-cinema: cubic-bezier(0.62, 0, 0.18, 1);
+  --ease-out: cubic-bezier(0.16, 0.84, 0.3, 1);
+
+  --gutter: clamp(16px, 4vw, 56px);
+
+  /* UI chrome colour follows the chapter tone (set on <html data-tone>). */
+  --chrome-fg: rgba(241, 211, 146, 0.86);
+  --chrome-dim: rgba(241, 211, 146, 0.4);
+  --focus: #f1d392;
+}
+
+html[data-tone="sepia"] {
+  --chrome-fg: rgba(58, 39, 20, 0.86);
+  --chrome-dim: rgba(58, 39, 20, 0.38);
+  --focus: #8e1b1b;
+}
+html[data-tone="light"] {
+  --chrome-fg: rgba(17, 17, 17, 0.86);
+  --chrome-dim: rgba(17, 17, 17, 0.32);
+  --focus: #111;
+}
+html[data-tone="future"] {
+  --chrome-fg: rgba(238, 240, 255, 0.9);
+  --chrome-dim: rgba(238, 240, 255, 0.35);
+  --focus: #3fd8f2;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--theater-black);
+  color: var(--film-white);
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--theater-black);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  overflow-x: clip;
+}
+
+img,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: rgba(201, 164, 92, 0.35);
+}
+
+/* ============================================================
+   Scroll engine (Lenis) + intro lock
+   ============================================================ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+html.is-scroll-locked,
+html.is-scroll-locked body {
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  left: 16px;
+  top: 16px;
+  z-index: 1000;
+  padding: 10px 16px;
+  background: #000;
+  color: #fff;
+  border-radius: 4px;
+  transform: translateY(-200%);
+  transition: transform 0.2s;
+}
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* Aged paper — shared by the portal and chapter IV so the join is invisible. */
+.parchment-bg {
+  background-color: var(--parchment);
+  background-image:
+    linear-gradient(90deg, rgba(120, 78, 28, 0.3), transparent 16%, transparent 84%, rgba(120, 78, 28, 0.3)),
+    var(--tex-paper, none);
+  background-size: 100% 100%, 512px 512px;
+  color: var(--ink-sepia);
+}
+
+/* Clearly marked developer placeholders (only styled in development). */
+[data-placeholder="true"] {
+  outline: 1px dashed currentColor;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

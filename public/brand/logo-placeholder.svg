@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- DEVELOPER PLACEHOLDER — replace with your logo and update siteConfig.logo in src/config/site.config.ts -->
+  <circle cx="100" cy="100" r="95" fill="none" stroke="#1b1b1b" stroke-width="5"/>
+  <circle cx="100" cy="100" r="84" fill="#1b1b1b"/>
+  <circle cx="100" cy="100" r="76" fill="none" stroke="#f2efe8" stroke-width="1.5" stroke-dasharray="2 5"/>
+  <path d="M100 38 L111 86 L152 96 L111 106 L100 146 L89 106 L48 96 L89 86 Z" fill="#f2efe8"/>
+  <text x="100" y="168" text-anchor="middle" font-family="Georgia, serif" font-size="11" letter-spacing="3" fill="#f2efe8">YOUR LOGO</text>
+</svg>

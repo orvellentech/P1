@@ -1,0 +1,171 @@
+.screenLight {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(120% 110% at 50% 44%, #f4f3ef, #d6d4ce 55%, #9a9893);
+}
+
+.weave {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+/* ---------- Countdown leader ---------- */
+.leader {
+  --sweep: 0deg;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  visibility: hidden;
+}
+.leader::before,
+.leader::after {
+  content: "";
+  position: absolute;
+  background: rgba(20, 20, 20, 0.75);
+}
+.leader::before {
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 0.35cqh;
+}
+.leader::after {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 0.35cqh;
+}
+.leaderCircle {
+  position: relative;
+  width: 70cqh;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 0.7cqh solid rgba(15, 15, 15, 0.85);
+  box-shadow: inset 0 0 0 5cqh transparent, inset 0 0 0 5.6cqh rgba(15, 15, 15, 0.7);
+  background: conic-gradient(rgba(20, 20, 20, 0.45) 0 var(--sweep), transparent var(--sweep));
+  display: grid;
+  place-items: center;
+  z-index: 1;
+}
+.leaderNumber {
+  font-family: var(--font-movie), serif;
+  font-weight: 700;
+  font-size: 34cqh;
+  line-height: 1;
+  color: #121212;
+}
+
+/* ---------- Title card ---------- */
+.card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.4cqh;
+  padding: 10cqh 8cqw;
+  visibility: hidden;
+  color: #141414;
+  text-align: center;
+}
+
+.frameDeco {
+  position: absolute;
+  inset: 4.5cqh 4cqw;
+  width: calc(100% - 8cqw);
+  height: calc(100% - 9cqh);
+  color: #1a1a1a;
+  pointer-events: none;
+}
+
+.caption {
+  font-family: var(--font-movie), serif;
+  font-size: 2.6cqh;
+  letter-spacing: 0.5em;
+  padding-left: 0.5em;
+  opacity: 0.8;
+}
+
+.logoPortal {
+  position: relative;
+  height: 30cqh;
+  /* Transform-only while zooming: the layer is rasterised once and scaled on the GPU. */
+  will-change: transform;
+  z-index: 1;
+}
+.logoIntro {
+  height: 100%;
+}
+.logoImg {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  /* Static filter — never animated, so it never forces re-rasterisation during the zoom. */
+  filter: grayscale(1) contrast(1.12);
+}
+
+.name {
+  font-family: var(--font-movie), serif;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: 0.14em;
+  padding-left: 0.14em;
+  white-space: nowrap;
+  text-shadow: 0 0 0.6cqh rgba(0, 0, 0, 0.25);
+}
+.char {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+.taglineRow {
+  display: flex;
+  align-items: center;
+  gap: 2.5cqw;
+  width: min(70cqw, 100%);
+}
+.rule {
+  flex: 1;
+  height: 0.3cqh;
+  background: currentColor;
+  transform-origin: 50% 50%;
+}
+.rule:first-child {
+  transform-origin: 100% 50%;
+}
+.rule:last-child {
+  transform-origin: 0% 50%;
+}
+.tagline {
+  font-family: var(--font-antique), serif;
+  font-style: italic;
+  font-size: 3.4cqh;
+  white-space: nowrap;
+}
+.est {
+  font-family: var(--font-movie), serif;
+  font-size: 2.4cqh;
+  letter-spacing: 0.4em;
+}
+
+.film {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+.filmFallback {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background-image: var(--tex-grain, none);
+  opacity: 0.3;
+  box-shadow: inset 0 0 12cqh rgba(0, 0, 0, 0.7);
+}

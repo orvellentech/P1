@@ -1,0 +1,141 @@
+.section {
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* White world. At the snap a hole tears open from the fingertips, revealing 2060 behind. */
+.paper {
+  --hole: 0px;
+  --ox: 50%;
+  --oy: 60%;
+  position: absolute;
+  inset: 0;
+  background: var(--paper-white);
+  -webkit-mask-image: radial-gradient(circle at var(--ox) var(--oy), transparent calc(var(--hole) - 1px), #000 calc(var(--hole) + 1px));
+  mask-image: radial-gradient(circle at var(--ox) var(--oy), transparent calc(var(--hole) - 1px), #000 calc(var(--hole) + 1px));
+}
+
+.statement {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(8px, 2vh, 24px);
+  padding: 0 var(--gutter) 12vh;
+  text-align: center;
+  color: var(--ink);
+  will-change: transform;
+}
+
+.boring {
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 800;
+  font-size: clamp(64px, 17vw, 280px);
+  line-height: 0.86;
+  letter-spacing: -0.055em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.12em;
+}
+.word {
+  display: inline-flex;
+  overflow: hidden;
+  padding: 0.04em 0.02em 0.06em;
+}
+/* The "?" tips over as it lands — it enters by fading, so it needs no mask. */
+.questionWord {
+  overflow: visible;
+}
+.blast {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+.char {
+  display: inline-block;
+}
+.question {
+  display: inline-block;
+  font-family: var(--font-display), serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  transform-origin: 50% 90%;
+}
+
+.magic {
+  font-family: var(--font-display), serif;
+  font-style: italic;
+  font-size: clamp(30px, 6.2vw, 104px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.26em;
+}
+.magicWord {
+  display: inline-flex;
+  overflow: hidden;
+  padding: 0.08em 0.02em 0.12em;
+}
+
+.handWrap {
+  position: absolute;
+  left: 50%;
+  bottom: -2vh;
+  height: min(66vh, 150vw);
+  aspect-ratio: 420 / 640;
+  margin-left: calc(min(66vh, 150vw) * -0.33);
+  z-index: 3;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+.handSnap {
+  width: 100%;
+  height: 100%;
+  transform-origin: 45% 80%;
+}
+.hand {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hint {
+  position: absolute;
+  left: 50%;
+  bottom: 3vh;
+  transform: translateX(-50%);
+  z-index: 4;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.burst {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+@media (max-width: 640px) {
+  .handWrap {
+    margin-left: calc(min(66vh, 150vw) * -0.36);
+  }
+}

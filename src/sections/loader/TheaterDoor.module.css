@@ -1,0 +1,438 @@
+.scene {
+  --door-h: min(62vh, 100vw);
+  --door-w: calc(var(--door-h) * 0.76);
+  --floor-y: 80vh;
+  --wall: #0e0906;
+  --wood-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='640'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.28 0.008' numOctaves='3' seed='4'/><feColorMatrix values='0 0 0 0 0.09  0 0 0 0 0.05  0 0 0 0 0.02  0 0 0 0.75 0'/></filter><rect width='100%25' height='100%25' filter='url(%23f)'/></svg>");
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+  /* No background: the wall is the doorway's box-shadow, so the theater shows through the opening. */
+  color: var(--gold-bright);
+}
+
+.camera {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% calc(var(--floor-y) - var(--door-h) * 0.45);
+  will-change: transform;
+}
+
+/* ---------- Wall & floor ---------- */
+.floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--floor-y);
+  bottom: 0;
+  background:
+    radial-gradient(60% 90% at 50% 0%, rgba(255, 190, 110, 0.1), transparent 70%),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.35) 0 1px, transparent 1px 90px),
+    linear-gradient(180deg, #1a100a, #070403);
+  z-index: 2;
+}
+
+.wallLight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    radial-gradient(calc(var(--door-w) * 0.9) calc(var(--door-h) * 0.9) at calc(50% - var(--door-w) * 0.95) calc(var(--floor-y) - var(--door-h) * 0.72), rgba(255, 176, 92, 0.22), transparent 70%),
+    radial-gradient(calc(var(--door-w) * 0.9) calc(var(--door-h) * 0.9) at calc(50% + var(--door-w) * 0.95) calc(var(--floor-y) - var(--door-h) * 0.72), rgba(255, 176, 92, 0.22), transparent 70%),
+    radial-gradient(130% 90% at 50% 80%, transparent 45%, rgba(0, 0, 0, 0.55));
+}
+
+/* ---------- Doorway (transparent hole in the wall) ---------- */
+.doorway {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--floor-y) - var(--door-h));
+  width: var(--door-w);
+  height: var(--door-h);
+  transform: translateX(-50%);
+  perspective: 1600px;
+  perspective-origin: 50% 45%;
+  /* The wall is this element's shadow, so the doorway itself stays see-through. */
+  box-shadow: 0 0 0 300vmax var(--wall);
+  z-index: 1;
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 60% at 50% 55%, rgba(255, 214, 150, 0.95), rgba(255, 150, 60, 0.55) 45%, rgba(80, 30, 10, 0.2) 80%),
+    #2a150a;
+  opacity: 0.5;
+  will-change: opacity;
+}
+
+.seam {
+  position: absolute;
+  left: 50%;
+  top: 2%;
+  bottom: 0;
+  width: 3px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(255, 210, 140, 0.2), rgba(255, 200, 120, 0.95) 60%, rgba(255, 220, 160, 1));
+  filter: blur(1.5px);
+  box-shadow: 0 0 18px 4px rgba(255, 170, 80, 0.45);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.door {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  transform-style: preserve-3d;
+  will-change: transform;
+  z-index: 2;
+}
+.left {
+  left: 0;
+  transform-origin: 0% 50%;
+}
+.right {
+  right: 0;
+  transform-origin: 100% 50%;
+}
+
+.face,
+.back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 190, 120, 0.1), transparent 30%, rgba(0, 0, 0, 0.35)),
+    var(--wood-grain),
+    linear-gradient(90deg, #3a2012, #4b2b17 45%, #34200f);
+  background-size: 100% 100%, 320px 640px, 100% 100%;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.6),
+    inset 0 0 40px rgba(0, 0, 0, 0.55);
+}
+.back {
+  transform: rotateY(180deg);
+  filter: brightness(0.55);
+}
+
+.edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  background: linear-gradient(90deg, #1c0f07, #3a2213 50%, #1c0f07);
+}
+.left .edge {
+  right: 0;
+  transform-origin: 100% 50%;
+  transform: rotateY(90deg);
+}
+.right .edge {
+  left: 0;
+  transform-origin: 0% 50%;
+  transform: rotateY(-90deg);
+}
+
+.panel {
+  position: absolute;
+  left: 13%;
+  right: 13%;
+  border-radius: 2px;
+  box-shadow:
+    inset 2px 2px 0 rgba(255, 210, 160, 0.12),
+    inset -2px -2px 0 rgba(0, 0, 0, 0.55),
+    0 0 0 5px rgba(0, 0, 0, 0.18),
+    0 0 0 6px rgba(255, 200, 150, 0.08);
+}
+.panelTop {
+  top: 7%;
+  height: 42%;
+}
+.panelBottom {
+  top: 56%;
+  height: 34%;
+}
+
+.porthole {
+  position: absolute;
+  left: 50%;
+  top: 24%;
+  width: 46%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 36% 32%, rgba(255, 255, 240, 0.65), transparent 24%),
+    radial-gradient(circle at 50% 58%, #ffe2a8, #f2a24a 50%, #8a3f12 90%);
+  box-shadow:
+    0 0 0 5px #8a6a33,
+    0 0 0 7px #3b2a12,
+    inset 0 0 14px rgba(60, 20, 0, 0.5),
+    0 0 34px 6px rgba(255, 170, 80, 0.4);
+  animation: portholeFlicker 3.2s steps(1) infinite;
+}
+@keyframes portholeFlicker {
+  0%, 100% { filter: brightness(1); }
+  37% { filter: brightness(1.12); }
+  39% { filter: brightness(0.92); }
+  71% { filter: brightness(1.06); }
+}
+
+.handle {
+  position: absolute;
+  top: 44%;
+  width: 7%;
+  height: 22%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #6d4f1f, #e8c77a 45%, #9b7632 70%, #4c3514);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6), 0 0 14px rgba(255, 200, 120, 0.15);
+}
+.left .handle {
+  right: 9%;
+}
+.right .handle {
+  left: 9%;
+}
+
+.kick {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 7%;
+  background: linear-gradient(180deg, #9b7632, #5a3f16);
+  box-shadow: inset 0 1px 0 rgba(255, 230, 170, 0.5);
+  opacity: 0.55;
+}
+
+/* ---------- Frame, sign & sconces (painted over the wall) ---------- */
+.trim {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--floor-y) - var(--door-h) - 16px);
+  width: calc(var(--door-w) + 32px);
+  height: calc(var(--door-h) + 16px);
+  transform: translateX(-50%);
+  border: 16px solid transparent;
+  border-bottom: 0;
+  border-image: linear-gradient(180deg, #5b3a1c, #2a180b) 1;
+  box-shadow:
+    0 0 0 2px rgba(201, 164, 92, 0.35),
+    0 20px 60px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  z-index: 3;
+}
+.trim::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 1px solid rgba(241, 211, 146, 0.25);
+  border-bottom: 0;
+}
+
+.marquee {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--floor-y) - var(--door-h) - 16px - clamp(58px, 9vh, 92px));
+  transform: translateX(-50%);
+  height: clamp(46px, 7.4vh, 74px);
+  padding: 0 clamp(18px, 3vw, 36px);
+  display: grid;
+  place-items: center;
+  z-index: 3;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #1d130b, #0e0905);
+  box-shadow:
+    0 0 0 2px #7d5f2c,
+    0 0 0 6px #1b1209,
+    0 0 0 8px #a8853f,
+    0 10px 40px rgba(0, 0, 0, 0.6);
+  font-family: var(--font-movie), serif;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  font-size: clamp(11px, 1.6vh, 16px);
+  white-space: nowrap;
+  color: #ffdfa0;
+  text-shadow: 0 0 12px rgba(255, 190, 100, 0.6);
+}
+.bulbs {
+  position: absolute;
+  inset: -12px;
+  border-radius: 8px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle, #fff1c6 0 2px, rgba(255, 200, 110, 0.5) 3px, transparent 5px) 0 0 / 16px 12px repeat-x,
+    radial-gradient(circle, #fff1c6 0 2px, rgba(255, 200, 110, 0.5) 3px, transparent 5px) 0 100% / 16px 12px repeat-x;
+  animation: chase 0.9s steps(2) infinite;
+  filter: drop-shadow(0 0 4px rgba(255, 190, 100, 0.8));
+}
+@keyframes chase {
+  to { background-position: 16px 0, -16px 100%; }
+}
+
+.sconce {
+  position: absolute;
+  top: calc(var(--floor-y) - var(--door-h) * 0.72);
+  width: 16px;
+  height: 30px;
+  border-radius: 8px 8px 4px 4px;
+  background: radial-gradient(circle at 50% 35%, #fff4d6, #ffb45c 50%, #7a4014);
+  box-shadow: 0 0 22px 8px rgba(255, 170, 80, 0.45), 0 0 80px 30px rgba(255, 150, 60, 0.15);
+  z-index: 3;
+  animation: sconce 4.2s steps(1) infinite;
+}
+.sconce::after {
+  content: "";
+  position: absolute;
+  left: -6px;
+  right: -6px;
+  bottom: -8px;
+  height: 10px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #a8853f, #4c3514);
+}
+.sconceLeft {
+  left: calc(50% - var(--door-w) * 0.95 - 8px);
+}
+.sconceRight {
+  left: calc(50% + var(--door-w) * 0.95 - 8px);
+  animation-delay: -1.7s;
+}
+@keyframes sconce {
+  0%, 100% { opacity: 1; }
+  47% { opacity: 0.86; }
+  48% { opacity: 1; }
+  81% { opacity: 0.93; }
+}
+
+.threshold {
+  position: absolute;
+  left: 50%;
+  top: var(--floor-y);
+  width: var(--door-w);
+  height: 0;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+.spill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(var(--door-h) * 0.22);
+  background: radial-gradient(50% 100% at 50% 0%, rgba(255, 190, 110, 0.55), transparent 70%);
+  opacity: 0.55;
+  transform-origin: 50% 0;
+  filter: blur(4px);
+}
+
+.dust {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* ---------- Loading status ---------- */
+.status {
+  position: absolute;
+  left: 50%;
+  bottom: max(28px, 5vh);
+  transform: translateX(-50%);
+  z-index: 5;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  font-family: var(--font-movie), serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  color: rgba(241, 211, 146, 0.55);
+  white-space: nowrap;
+}
+.bar {
+  width: 140px;
+  height: 1px;
+  background: rgba(241, 211, 146, 0.15);
+  overflow: hidden;
+}
+.barFill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: rgba(241, 211, 146, 0.75);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+}
+
+/* ---------- Error ---------- */
+.error {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--floor-y) - var(--door-h) * 0.55);
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  width: min(420px, calc(100vw - 32px));
+  padding: 32px 28px 28px;
+  text-align: center;
+  background: rgba(8, 5, 3, 0.9);
+  border: 1px solid rgba(201, 164, 92, 0.45);
+  box-shadow: 0 0 0 6px rgba(8, 5, 3, 0.7), 0 30px 80px rgba(0, 0, 0, 0.8);
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+}
+.errorTitle {
+  font-family: var(--font-movie), serif;
+  font-weight: 600;
+  font-size: clamp(20px, 3.2vw, 28px);
+  letter-spacing: 0.16em;
+  color: var(--gold-bright);
+}
+.errorText {
+  font-family: var(--font-antique-body), serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(241, 211, 146, 0.7);
+}
+.errorDetail {
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  color: rgba(241, 211, 146, 0.4);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.retry {
+  margin-top: 6px;
+  padding: 12px 34px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold-bright);
+  font-family: var(--font-movie), serif;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.3s var(--ease-out), color 0.3s var(--ease-out);
+}
+.retry:hover {
+  background: var(--gold);
+  color: #140c06;
+}
+.retry:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+@media (orientation: portrait) {
+  .scene {
+    --floor-y: 74vh;
+  }
+}

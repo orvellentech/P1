@@ -1,0 +1,297 @@
+.section {
+  position: relative;
+  background: var(--theater-black);
+}
+
+.marker {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.sticky {
+  --house: 0.12;
+  --lit: calc(0.2 + var(--house) * 0.8);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--theater-black);
+}
+
+.dolly,
+.world {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+/* ---------- Architecture ---------- */
+.backWall {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 55% at 50% 40%, rgba(120, 30, 20, 0.35), transparent 70%),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.25) 0 2px, transparent 2px 120px),
+    linear-gradient(180deg, #1a0d09, #0b0605 70%);
+  filter: brightness(var(--lit));
+}
+
+.proscenium {
+  position: absolute;
+  left: 50%;
+  top: 6vh;
+  width: min(94vw, 150vh);
+  height: 72vh;
+  transform: translateX(-50%);
+}
+
+.frame {
+  position: absolute;
+  inset: 0;
+  border-radius: 46% 46% 0 0 / 8vh 8vh 0 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.22) 0 2px, transparent 2px 10px),
+    linear-gradient(180deg, #7a5a24, #e0bf74 12%, #8d6a2c 30%, #c9a45c 60%, #5f4318);
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 236, 190, 0.35),
+    0 0 0 1px rgba(0, 0, 0, 0.8),
+    0 30px 120px rgba(0, 0, 0, 0.8);
+  filter: brightness(var(--lit));
+}
+.frame::after {
+  content: "";
+  position: absolute;
+  inset: 1.4vh;
+  border-radius: 46% 46% 0 0 / 7vh 7vh 0 0;
+  box-shadow: 0 0 0 0.5vh rgba(40, 25, 8, 0.8), inset 0 0 3vh rgba(0, 0, 0, 0.9);
+}
+
+.crest {
+  position: absolute;
+  left: 50%;
+  top: -3.2vh;
+  width: clamp(80px, 14vh, 150px);
+  transform: translateX(-50%);
+  filter: brightness(var(--lit)) drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
+}
+
+.stageBox {
+  position: absolute;
+  inset: 2vh 2.4vh 0;
+  border-radius: 44% 44% 0 0 / 6vh 6vh 0 0;
+  overflow: hidden;
+  background: #020101;
+  container-type: size;
+}
+
+.screen {
+  position: absolute;
+  left: 50%;
+  top: 15cqh;
+  width: min(90cqw, 72cqh * 4 / 3);
+  aspect-ratio: 4 / 3;
+  transform: translateX(-50%);
+  container-type: size;
+  background: #0b0b0b;
+  overflow: hidden;
+  border-radius: 1.2cqw / 1.6cqh;
+  box-shadow: 0 0 0 2px #050505, 0 0 60px rgba(255, 255, 255, 0.04);
+}
+
+.curtains {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+}
+
+.fallbackCurtain {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 51%;
+  z-index: 3;
+  background:
+    repeating-linear-gradient(90deg, #2b0306 0 2%, #7a0f16 3.5%, #b3262a 4.5%, #6d0b12 6%, #2b0306 8%),
+    #5a0d12;
+  box-shadow: inset 0 -30px 40px rgba(0, 0, 0, 0.6);
+}
+.fallbackLeft {
+  left: 0;
+  transform-origin: 0 50%;
+}
+.fallbackRight {
+  right: 0;
+  transform-origin: 100% 50%;
+}
+.fallbackValance {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 13%;
+  z-index: 4;
+  background:
+    linear-gradient(180deg, transparent 80%, #c9a45c 80% 86%, transparent 86%),
+    repeating-linear-gradient(90deg, #4a080d 0 1%, #8e1a20 2%, #4a080d 3%);
+  border-radius: 0 0 50% 50% / 0 0 30% 30%;
+}
+
+.apron {
+  position: absolute;
+  left: 50%;
+  top: 78vh;
+  width: min(100vw, 160vh);
+  height: 5vh;
+  transform: translateX(-50%) perspective(400px) rotateX(38deg);
+  transform-origin: 50% 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.35) 0 1px, transparent 1px 6%),
+    linear-gradient(180deg, #5a3a1e, #2a180b);
+  filter: brightness(var(--lit));
+}
+.footlights {
+  position: absolute;
+  left: 50%;
+  top: 77.4vh;
+  width: min(90vw, 140vh);
+  height: 10px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(255, 220, 160, 0.95) 0 2px, rgba(255, 170, 80, 0.3) 4px, transparent 8px) 0 50% / 5% 100% repeat-x;
+  filter: blur(0.5px) brightness(calc(0.4 + var(--house)));
+  z-index: 2;
+}
+
+/* ---------- Light & atmosphere ---------- */
+.beam {
+  position: absolute;
+  left: 50%;
+  top: -10vh;
+  width: min(92vw, 120vh);
+  height: 92vh;
+  transform: translateX(-50%);
+  clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, rgba(255, 250, 235, 0.14), rgba(255, 250, 235, 0.05) 60%, rgba(255, 250, 235, 0.02));
+  mix-blend-mode: screen;
+  filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.fog {
+  position: absolute;
+  inset: 30vh -20vw 10vh;
+  pointer-events: none;
+  z-index: 4;
+  mix-blend-mode: screen;
+  opacity: calc(0.15 + var(--house) * 0.35);
+}
+.fog::before,
+.fog::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(40% 30% at 30% 60%, rgba(200, 170, 140, 0.18), transparent 70%),
+    radial-gradient(35% 25% at 70% 50%, rgba(200, 170, 140, 0.14), transparent 70%);
+  filter: blur(30px);
+  animation: drift 26s ease-in-out infinite alternate;
+}
+.fog::after {
+  animation-duration: 34s;
+  animation-direction: alternate-reverse;
+  transform: scaleX(-1);
+}
+@keyframes drift {
+  from { transform: translateX(-6%) translateY(2%); }
+  to { transform: translateX(6%) translateY(-2%); }
+}
+
+.motes {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.seats {
+  position: absolute;
+  left: -2vw;
+  right: -2vw;
+  bottom: -2vh;
+  height: 26vh;
+  z-index: 6;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+.seats svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Portal (parchment revealed through the logo) ---------- */
+.portal {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  opacity: 0;
+  --mx: 50vw;
+  --my: 50vh;
+  --mw: 0px;
+  --mh: 0px;
+  --cx: 50vw;
+  --cy: 50vh;
+  --iris: 0vmax;
+  /* Background comes from the global .parchment-bg so it continues seamlessly into chapter IV. */
+  -webkit-mask-image: var(--logo-mask), radial-gradient(circle at var(--cx) var(--cy), #000 calc(var(--iris) - 10vmax), transparent var(--iris));
+  mask-image: var(--logo-mask), radial-gradient(circle at var(--cx) var(--cy), #000 calc(var(--iris) - 10vmax), transparent var(--iris));
+  -webkit-mask-size: var(--mw) var(--mh), 100% 100%;
+  mask-size: var(--mw) var(--mh), 100% 100%;
+  -webkit-mask-position: var(--mx) var(--my), 0 0;
+  mask-position: var(--mx) var(--my), 0 0;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.portalContent {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  will-change: transform, filter;
+}
+
+.flash {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 50%, #fffaf0, rgba(255, 244, 220, 0.6) 50%, rgba(255, 240, 210, 0.2));
+}
+
+@media (orientation: portrait) {
+  .proscenium {
+    top: 11vh;
+    width: 96vw;
+    height: 56vh;
+  }
+  .apron {
+    top: 67vh;
+  }
+  .footlights {
+    top: 66.4vh;
+  }
+  .screen {
+    top: 22cqh;
+  }
+  .seats {
+    height: 22vh;
+  }
+}
