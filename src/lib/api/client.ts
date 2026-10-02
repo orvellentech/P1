@@ -46,7 +46,39 @@ function isSiteContent(v: unknown): v is SiteContent {
   );
 }
 
+/** Waits `ms`, rejecting early if the loading run is aborted (e.g. its timeout fired). */
+function wait(ms: number, signal: AbortSignal) {
+  return new Promise<void>((resolve, reject) => {
+    if (signal.aborted) return reject(new Error("Aborted"));
+    const t = setTimeout(resolve, ms);
+    signal.addEventListener("abort", () => (clearTimeout(t), reject(new Error("Aborted"))), { once: true });
+  });
+}
+
+/** Network errors, timeouts, rate limits and 5xx are worth another try; 4xx and bad payloads are not. */
+function isTransient(err: unknown) {
+  if (err instanceof ApiError) return err.status === 0 || err.status === 408 || err.status === 429 || err.status >= 500;
+  return err instanceof TypeError; // fetch() network failure
+}
+
+/**
+ * A single dropped request should not end the show: transient failures are
+ * retried quietly (the door keeps shaking) before the error state is shown.
+ * The loading task's own timeout still bounds the total wait.
+ */
 export async function fetchInit(signal: AbortSignal): Promise<InitResponse> {
+  const backoff = [600, 1500, 3000];
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await fetchInitOnce(signal);
+    } catch (err) {
+      if (signal.aborted || attempt >= backoff.length || !isTransient(err)) throw err;
+      await wait(backoff[attempt], signal);
+    }
+  }
+}
+
+async function fetchInitOnce(signal: AbortSignal): Promise<InitResponse> {
   const res = await fetch(`/api/init${debugQuery()}`, { signal, cache: "no-store", headers: { Accept: "application/json" } });
   const body = (await readJson(res)) as Partial<InitResponse> & { error?: string } | null;
   if (!res.ok) {
